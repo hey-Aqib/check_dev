@@ -2,7 +2,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { usePathname } from 'next/navigation'; 
 import LoadingScreen from './LoadingScreen';
-import Loader from './ui/Loader';
 
 // Lazy-loaded components
 const Header = lazy(() => import('./navbar/Header'));
@@ -29,7 +28,7 @@ export default function SplashWrapper({ children }) {
       )}
 
       <div className={`transition-opacity duration-1000 ${loading ? 'opacity-0' : 'opacity-100'}`}>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={null}>
           <Header />
           {!loading && children}
           <Footer key={pathname}/> 
