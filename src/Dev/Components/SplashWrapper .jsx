@@ -23,7 +23,7 @@ export default function SplashWrapper({ children }) {
   return (
     <>
       {loading && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black text-white transition-opacity duration-1000 opacity-100">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black text-white transition-opacity duration-1000 opacity-100">
           <LoadingScreen />
         </div>
       )}

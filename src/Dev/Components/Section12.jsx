@@ -22,8 +22,8 @@ export default function Section12() {
     gsap.set(logoRef.current, { x: "-100%", autoAlpha: 1 });
 
     if(window.innerWidth < 768) {
-      Container_Start.current = "50% center"
-      panda_start.current = "50% center"
+      Container_Start.current = "30% center"
+      panda_start.current = "30% center"
       time.current = 3
     }
 
@@ -100,7 +100,7 @@ export default function Section12() {
     <div className="bg-black">
       <div
         ref={containerRef}
-        className="relative w-full h-[60vh] max-sm:h-[75vh] md:h-[150vh] overflow-hidden"
+        className="relative w-full h-[60vh] max-sm:h-[80vh] md:h-[150vh] overflow-hidden"
       >
         <img
           ref={logoRef}
