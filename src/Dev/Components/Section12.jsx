@@ -34,8 +34,8 @@ export default function Section12() {
     });
 
     ScrollTrigger.create({
-      trigger: document.body, 
-      start: "top top",
+      trigger: containerRef.current, 
+      start: Container_Start.current,
       end: "bottom bottom",
       onUpdate: (self) => {
         if (self.direction === -1) {
