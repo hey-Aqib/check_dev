@@ -167,7 +167,7 @@ const ScrollMerge3D = () => {
       ref={containerRef}
       className="relative w-full h-[150vh] max-sm:h-[120vh] bg-black"
     >
-      <div className="sticky top-0 h-screen w-full">
+      <div className="sticky top-0 h-screen w-full max-sm:hidden">
         <Canvas
           frameloop="demand"
           dpr={[1, 1.5]}
