@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,6 +61,7 @@ const Section2 = () => {
           end: "bottom center",
           scrub: true,
           pinSpacing: false,
+          markers: true
         },
       });
 

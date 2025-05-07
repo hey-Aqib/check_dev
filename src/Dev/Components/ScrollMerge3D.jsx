@@ -144,7 +144,6 @@ Scene.propTypes = {
     PropTypes.shape({ current: PropTypes.any })
   ]).isRequired,
 };
-/* eslint-enable react/no-unknown-property */
 
 const ScrollMerge3D = () => {
   const containerRef = useRef();
@@ -188,6 +187,7 @@ const ScrollMerge3D = () => {
         start: "top top",
         end: "bottom bottom",
         scrub: 1,
+        markers: true,
         onUpdate: (self) => {
           setProgress(self.progress);
         },
