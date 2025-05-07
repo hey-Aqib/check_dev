@@ -1,12 +1,44 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Section6 = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRefs = useRef([]);
   const [isPaused, setIsPaused] = useState(false);
+
+  gsap.registerPlugin(ScrollTrigger);
+  
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const elements = gsap.utils.toArray(".fade-in-section6");
+  
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+      });
+  
+      // Clean up scroll triggers when component unmounts
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    }, []);
+
   const slides = [
     {
       id: 1,
@@ -37,7 +69,7 @@ const Section6 = () => {
   useLayoutEffect(() => {
     if (isPaused || !slideRefs.current[currentSlide]) return;
   
-    slideRefs.current.forEach((el, idx) => {
+    slideRefs.current.forEach((el) => {
       if (el) {
         gsap.set(el, { opacity: 0, x: "100%" });
       }
@@ -78,7 +110,7 @@ const Section6 = () => {
       <div
         className="relative w-full h-full z-20"
       >
-        <h1 className="text-center p-8 max-sm:p-0 pb-0 mt-16 text-4xl max-sm:text-4xl md:text-6xl 2xl:text-7xl font-bold">
+        <h1 className="text-center p-8 max-sm:p-0 pb-0 mt-16 text-4xl max-sm:text-4xl md:text-6xl 2xl:text-7xl font-bold fade-in-section6">
         Your Business Statistics Turn Your <br />Decisions to Profit
         </h1>
 

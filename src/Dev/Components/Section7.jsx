@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const buttons = [
@@ -85,18 +87,49 @@ function FancyButton({ text, isSelected, onClick, disabled }) {
 const Section7 = () => {
   const [selected, setSelected] = useState(0);
   const disabledButtons = [2, 3];
+
+  gsap.registerPlugin(ScrollTrigger);
+  
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const elements = gsap.utils.toArray(".text-animation");
+  
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+      });
+  
+      // Clean up scroll triggers when component unmounts
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    }, []);
+
   return (
     <div className="relative w-full h-auto bg-black text-white p-10">
       <div className="text-3xl max-sm:text-center sm:text-3xl md:text-4xl">
-        <h1 className="w-[70%] mx-10 max-sm:text-center max-sm:m-auto max-sm:p-0 2xl:text-5xl p-8 pl-0 pb-0 mt-5 font-bold">
+        <h1 className="w-[70%] mx-10 max-sm:text-center max-sm:m-auto max-sm:p-0 2xl:text-5xl p-8 pl-0 pb-0 mt-5 font-bold text-animation">
           Technologies We Use
         </h1>
-        <p className="w-[92%] max-sm:text-center max-sm:mx-0 max-sm:w-[100%] max-sm:text-sm 2xl:w-[50%] px-2 mx-10 text-xl mt-5">
+        <p className="w-[92%] max-sm:text-center max-sm:mx-0 max-sm:w-[100%] max-sm:text-sm 2xl:w-[50%] px-2 mx-10 text-xl mt-5 text-animation">
           CBS integrates a mix of technologies to deliver top-tier
           solutions for our clients. Our technology toolkit features
         </p>
       </div>
-      <div className="">
+      <div className="text-animation">
         <div className="mt-10 text-center">
           <div className="flex flex-wrap justify-evenly gap-4">
           {buttons.map((btn, i) => (
@@ -114,7 +147,7 @@ const Section7 = () => {
           <div className="mt-10 px-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {buttons[selected].images.map((img, i) => (
-                <div key={i} className="text-center mb-5">
+                <div key={i} className="text-center mb-5 text-animation">
                   <img
                     src={img.src}
                     alt={img.title}

@@ -1,13 +1,14 @@
 "use client";
-import gsap from "gsap";
 import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
+
+
 const Section3 = () => {
-  const imgRef = useRef(null);
-
+  const sectionRef = useRef(null);
+  
  
-
   const serviceSections = [
     {
       id: "01",
@@ -65,73 +66,101 @@ const Section3 = () => {
     },
   ];
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".fade-in");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    });
+
+    // Clean up scroll triggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <div className="bg-black text-white">
-      <div className="p-[10%] pt-0 text-6xl w-[20%]">
+    <div ref={sectionRef} className="bg-black text-white">
+      <div className="p-[10%] pt-0 text-6xl w-[20%] fade-in">
         <h1>Our Services</h1>
       </div>
       <div className="p-[7%] pt-0 pe-0 max-sm:p-5 flex flex-col gap-5 justify-center items-center">
         {serviceSections.map((section) => (
-          <div key={section.id} className="w-full flex flex-col items-center">
+          <div key={section.id} className="service-section w-full flex flex-col items-center">
             {section.topLine && (
               <img
                 src={section.topLine}
                 alt="line"
-                className="w-fit m-auto max-sm:hidden block"
+                className="w-fit m-auto max-sm:hidden block fade-in"
               />
             )}
-            <span className="text-6xl text-red-500 max-sm:text-4xl m-5">
+            <span className="text-6xl text-red-500 max-sm:text-4xl m-5 fade-in">
               [ {section.id} ]
             </span>
-            <h1 className="text-4xl w-full md:w-[50%] max-sm:text-3xl text-center">
+            <h1 className="text-4xl w-full md:w-[50%] max-sm:text-3xl text-center fade-in">
               {section.title}
             </h1>
-            <p className="w-full mt-3 md:w-[70%] text-xl max-sm:text-base text-center">
+            <p className="w-full mt-3 md:w-[70%] text-xl max-sm:text-base text-center fade-in">
               {section.description}
             </p>
 
-            {/* grid */}
             <div className="grid grid-cols-[1fr_0.2fr_1fr] gap-4 w-full max-sm:block">
               <div className="p-4 mt-20 w-full md:w-[60%] max-sm:mt-10 max-sm:w-[90%] max-sm:p-0">
                 {section.leftCards.map((card, index) => (
                   <div key={index} className="max-sm:text-center mb-15 max-sm:mb-10">
                     <img
-                      className="solutions w-[60%] max-sm:w-[40%]
-                       max-sm:ml-[30%] relative z-20"
+                      className="solutions w-[60%] max-sm:w-[40%] max-sm:ml-[30%] relative z-20 fade-in"
                       src={card.img}
                       alt=""
                     />
-                    <h1 className="mt-5 text-4xl w-full md:w-[100%] max-sm:text-2xl">
+                    <h1 className="mt-5 text-4xl w-full md:w-[100%] max-sm:text-2xl fade-in">
                       {card.title}
                     </h1>
-                    <p className="mt-10 max-sm:mt-5">{card.desc}</p>
+                    <p className="mt-10 max-sm:mt-5 fade-in">{card.desc}</p>
                   </div>
                 ))}
               </div>
-              <div className="p-4 max-sm:hidden">
+              <div className="p-4 max-sm:hidden fade-in">
                 <img
                   src={section.middleLine}
                   alt="line"
-                  className="w-fit m-auto block"
+                  className="w-fit m-auto block fade-in"
                 />
               </div>
               <div className="p-4 mt-20 w-full md:w-[60%] max-sm:mt-10 max-sm:w-[90%] max-sm:p-0 max-sm:text-center">
                 <div>
                   <img
-                    className="solutions w-[60%] max-sm:w-[40%] max-sm:ml-[30%] relative z-20"
+                    className="solutions w-[60%] max-sm:w-[40%] max-sm:ml-[30%] relative z-20 fade-in"
                     src={section.rightCard.img}
                     alt=""
                   />
-                  <h1 className="mt-10 text-4xl w-full md:w-[100%] max-sm:text-2xl">
+                  <h1 className="mt-10 text-4xl w-full md:w-[100%] max-sm:text-2xl fade-in">
                     {section.rightCard.title}
                   </h1>
-                  <p className="mt-10 max-sm:mt-5">{section.rightCard.desc}</p>
+                  <p className="mt-10 max-sm:mt-5 fade-in">{section.rightCard.desc}</p>
                 </div>
               </div>
             </div>
 
             {section.bottomText && (
-              <p className="text-center w-full md:w-[47%] max-sm:w-[90%] mt-10 max-sm:mt-5">
+              <p className="text-center w-full md:w-[47%] max-sm:w-[90%] mt-10 max-sm:mt-5 fade-in">
                 {section.bottomText}
               </p>
             )}
@@ -140,7 +169,7 @@ const Section3 = () => {
               <img
                 src="/dev/images/top_line.svg"
                 alt="line"
-                className="w-fit m-auto block max-sm:hidden mt-10"
+                className="w-fit m-auto block max-sm:hidden mt-10 fade-in"
               />
             )}
           </div>

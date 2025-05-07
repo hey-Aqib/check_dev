@@ -6,6 +6,37 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Footer = () => {
   const cursorRef = useRef(null);
 
+
+  gsap.registerPlugin(ScrollTrigger);
+      
+        useEffect(() => {
+          requestAnimationFrame(() => {
+            const elements = gsap.utils.toArray(".footer_animation_text");
+      
+            elements.forEach((el) => {
+              gsap.fromTo(
+                el,
+                { opacity: 0, y: 50 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 1,
+                  scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse",
+                  },
+                }
+              );
+            });
+          });
+      
+          // Clean up scroll triggers when component unmounts
+          return () => {
+            ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+          };
+        }, []);
+
   useEffect(() => {
     const moveCursor = (e) => {
       gsap.to(cursorRef.current, {
@@ -71,7 +102,7 @@ const Footer = () => {
     >
       <div className="w-full flex items-center pl-30">
         <div className="w-full py-5">
-          <h2 className="text-white text-5xl font-semibold">Let's</h2>
+          <h2 className="text-white text-5xl font-semibold footer_animation_text">Let's</h2>
         </div>
       </div>
       <div className="w-full">
@@ -83,19 +114,19 @@ const Footer = () => {
       </div>
       <div className="w-full flex max-sm:flex-col justify-center items-center md:text-2xl gap-15 text-white py-12">
         <div>
-          <p>Industries</p>
+          <p className="footer_animation_text">Industries</p>
         </div>
         <div>
-          <p>Locations</p>
+          <p className="footer_animation_text">Locations</p>
         </div>
         <div>
-          <p>Facebook</p>
+          <p className="footer_animation_text">Facebook</p>
         </div>
         <div>
-          <p>Instagram</p>
+          <p className="footer_animation_text">Instagram</p>
         </div>
         <div>
-          <p>Linkedin</p>
+          <p className="footer_animation_text">Linkedin</p>
         </div>
       </div>
       <footer className=" w-full flex max-sm:flex-col  justify-between items-center px-10  pt-4 pb-15 max-sm:visible">

@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,6 +12,36 @@ export default function Section12() {
   const Container_Start = useRef("top top")
   const panda_start = useRef("35% center")
   const time = useRef(5)
+
+  gsap.registerPlugin(ScrollTrigger);
+    
+      useEffect(() => {
+        requestAnimationFrame(() => {
+          const elements = gsap.utils.toArray(".text_animation_section12");
+    
+          elements.forEach((el) => {
+            gsap.fromTo(
+              el,
+              { opacity: 0, y: 50 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          });
+        });
+    
+        // Clean up scroll triggers when component unmounts
+        return () => {
+          ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        };
+      }, []);
 
   useLayoutEffect(() => {
 
@@ -135,7 +165,7 @@ export default function Section12() {
           style={{ zIndex: 10, opacity: 0 }}
         />
 
-        <p className="absolute text-center text-white bottom-[5%] xl:bottom-[12%] md:bottom-[17%] lg:bottom-[13%] 2xl:bottom-[10%] right-[30%] text-xl max-sm:text-sm 2xl:text-4xl md:text-1xl lg:text-2xl font-medium w-[43%] xl:w-[43%] lg:w-[48%] 2xl:[50%]">
+        <p className="absolute text-center text-white bottom-[5%] xl:bottom-[12%] md:bottom-[17%] lg:bottom-[13%] 2xl:bottom-[10%] right-[30%] text-xl max-sm:text-sm 2xl:text-4xl md:text-1xl lg:text-2xl font-medium w-[43%] xl:w-[43%] lg:w-[48%] 2xl:[50%] text_animation_section12">
           We Had to put the panda somewhere, so what if it's not in our logo,
           we still love them.
         </p>

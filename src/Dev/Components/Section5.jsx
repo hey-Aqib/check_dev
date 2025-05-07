@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import PropTypes from "prop-types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -170,14 +171,44 @@ const Section5 = () => {
   const buttons = ["WHEEL", "BOX", "PYRAMID"];
   const [hovered, setHovered] = useState(null);
 
+  
+  
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const elements = gsap.utils.toArray(".fade-in-text");
+  
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+      });
+  
+      // Clean up scroll triggers when component unmounts
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    }, []);
+
   return (
     <div className="w-full bg-black text-white relative">
       <div className="grid grid-cols-2 max-sm:flex max-sm:flex-col w-full h-full">
         <div className="w-[90%] ml-[10%] mt-[10%]">
-          <h1 className="mt-10 text-6xl w-[50%] max-sm:text-4xl max-sm:w-[100%]">
+          <h1 className="mt-10 text-6xl w-[50%] max-sm:text-4xl max-sm:w-[100%] fade-in-text">
             AI for Software Development
           </h1>
-          <p className="mt-10 mb-[1%] max-sm:w-[80%] w-[50%]">
+          <p className="mt-10 mb-[1%] max-sm:w-[80%] w-[50%] fade-in-text">
             Developing custom software, mobile apps, and web platforms tailored
             to your business needs
           </p>
@@ -238,6 +269,11 @@ const Section5 = () => {
       </div>
     </div>
   );
+};
+NeonCube.propTypes = {
+  position: PropTypes.arrayOf(PropTypes.number),
+  scale: PropTypes.number,
+  rotation: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default Section5;

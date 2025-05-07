@@ -1,6 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -8,6 +10,37 @@ const Player = dynamic(
 );
 
 const Section8 = () => {
+
+  gsap.registerPlugin(ScrollTrigger);
+    
+      useEffect(() => {
+        requestAnimationFrame(() => {
+          const elements = gsap.utils.toArray(".text_animation_section8");
+    
+          elements.forEach((el) => {
+            gsap.fromTo(
+              el,
+              { opacity: 0, y: 50 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          });
+        });
+    
+        // Clean up scroll triggers when component unmounts
+        return () => {
+          ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        };
+      }, []);
+
   return (
     <div className="relative w-full min-h-screen bg-black pt-10 pb-10">
       <div className="relative max-sm:mt-10">
@@ -24,7 +57,7 @@ const Section8 = () => {
       <section className="black overflow-hidden relative">
         <div className="container rel full w-container mx-auto px-4">
           <div className="heading-wrapper max-sm:my-15 text-center my-8">
-            <h2 className="text-white text-3xl font-bold">Our Methodologies</h2>
+            <h2 className="text-white text-3xl font-bold text_animation_section8">Our Methodologies</h2>
           </div>
 
           <div className="relative flex flex-col items-center">
@@ -45,10 +78,10 @@ const Section8 = () => {
                     alt="Ai Service"
                     className="w-5 mb-2 max-sm:w-3 z-21"
                   />
-                  <h3 className="text-lg font-semibold transition-opacity duration-300">
+                  <h3 className="text-lg font-semibold transition-opacity duration-300 text_animation_section8">
                     Agile Development
                   </h3>
-                  <p className="text-sm mt-1 max-sm:w-30">
+                  <p className="text-sm mt-1 max-sm:w-30 text_animation_section8">
                     We quickly adapt to changes through multiple loops,
                     consistently delivering high-value results.
                   </p>
@@ -62,8 +95,8 @@ const Section8 = () => {
                     alt="Ai Service"
                     className="w-7 mb-2 max-sm:w-3 z-21"
                   />
-                  <h3 className="text-lg font-semibold">Design Thinking</h3>
-                  <p className="text-sm mt-1 max-sm:w-30">
+                  <h3 className="text-lg font-semibold text_animation_section8">Design Thinking</h3>
+                  <p className="text-sm mt-1 max-sm:w-30 text_animation_section8">
                     We prioritise a user-focused approach, creating innovative
                     solutions that effectively meet client needs.
                   </p>
@@ -77,8 +110,8 @@ const Section8 = () => {
                     alt="Ai Service"
                     className="w-5 mb-2 max-sm:w-3 z-21"
                   />
-                  <h3 className="text-lg font-semibold">DevOps</h3>
-                  <p className="text-sm mt-1 max-sm:w-30">
+                  <h3 className="text-lg font-semibold text_animation_section8">DevOps</h3>
+                  <p className="text-sm mt-1 max-sm:w-30 text_animation_section8">
                     Our continuous integration and deployment practices ensure
                     rapid and reliable software releases.
                   </p>

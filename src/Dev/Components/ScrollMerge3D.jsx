@@ -1,6 +1,7 @@
 "use client";
+import React, { useRef, useEffect, Suspense, useState } from "react";
+import PropTypes from "prop-types";
 import { PerformanceMonitor } from "@react-three/drei";
-import { useRef, useEffect, Suspense, useState } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { gsap } from "gsap";
@@ -12,6 +13,7 @@ import { Galaxy } from "./GalaxyBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* eslint-disable react/no-unknown-property */
 const LogoModel = ({ url, modelRef, visible, emissiveIntensity = 0 }) => {
   const { scene } = useLoader(GLTFLoader, url);
 
@@ -29,17 +31,29 @@ const LogoModel = ({ url, modelRef, visible, emissiveIntensity = 0 }) => {
   return <primitive ref={modelRef} object={scene} visible={visible} />;
 };
 
+LogoModel.propTypes = {
+  url: PropTypes.string.isRequired,
+  modelRef: PropTypes.oneOfType([
+    PropTypes.func, 
+    PropTypes.shape({ current: PropTypes.any })
+  ]).isRequired,
+  visible: PropTypes.bool.isRequired,
+  emissiveIntensity: PropTypes.number,
+};
+
 const Scene = ({ progress, leftModelRef, rightModelRef }) => {
   const cameraRef = useRef(null);
   const [emissiveIntensity, setEmissiveIntensity] = useState(0);
   const [bloomIntensity, setBloomIntensity] = useState(1);
 
   useFrame(() => {
-    cameraRef.current.lookAt(0, 0, 0);
+    if (cameraRef.current) {
+      cameraRef.current.lookAt(0, 0, 0);
+    }
   });
 
   useEffect(() => {
-    if (!leftModelRef.current || !rightModelRef.current) return;
+    if (!leftModelRef?.current || !rightModelRef?.current) return;
 
     leftModelRef.current.position.set(-4, 0, 0);
     rightModelRef.current.position.set(4, 0, 0);
@@ -79,7 +93,7 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
     } else if (progress < 0.7) {
       setBloomIntensity(0);
     }
-  }, [progress]);
+  }, [progress, leftModelRef, rightModelRef]);
 
   return (
     <>
@@ -119,11 +133,51 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
   );
 };
 
+Scene.propTypes = {
+  progress: PropTypes.number.isRequired,
+  leftModelRef: PropTypes.oneOfType([
+    PropTypes.func, 
+    PropTypes.shape({ current: PropTypes.any })
+  ]).isRequired,
+  rightModelRef: PropTypes.oneOfType([
+    PropTypes.func, 
+    PropTypes.shape({ current: PropTypes.any })
+  ]).isRequired,
+};
+/* eslint-enable react/no-unknown-property */
+
 const ScrollMerge3D = () => {
   const containerRef = useRef();
   const leftModelRef = useRef();
   const rightModelRef = useRef();
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".fade-in_ani");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -188,8 +242,8 @@ const ScrollMerge3D = () => {
 
       <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-30">
         {progress < 0.5 ? (
-          <h1 className="text-4xl md:text-3xl font-bold text-white text-center px-4">
-            <p>
+          <h1 className="text-4xl md:text-3xl font-bold text-white text-center px-4 fade-in_ani">
+            <p> 
               <span className="block">We have worked with</span> some of the
               biggest names in USA
             </p>
@@ -209,7 +263,6 @@ const ScrollMerge3D = () => {
                 </Canvas>
               </div>
             <div className="flex items-center justify-center w-full relative z-100">
-
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-sm:grid-cols-2 max-sm:gap-4 w-[80%]">
                 {data.map((item, index) => (
                   <div

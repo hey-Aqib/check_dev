@@ -3,12 +3,42 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import Section9Card from "./Section9Card";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Section9 = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRefs = useRef([]);
   const [isPaused, setIsPaused] = useState(false);
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".text_animation_section9");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    });
+
+    // Clean up scroll triggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   const details = [
     {
@@ -17,21 +47,19 @@ const Section9 = () => {
       title: "President",
       rating: 5,
       text: [
-        "I have been working with Terry for a few months now, and everything that he has promised me has came true and he works very hard for all his clients and would recommend him for anyone needing to improve their business. When we first started, we were had virtually no calls and after his crew got done we were substantially busy and have been consistently so very happy with him and his crew, and would recommend him anytime."
-      ]
+        "I have been working with Terry for a few months now, and everything that he has promised me has came true and he works very hard for all his clients and would recommend him for anyone needing to improve their business. When we first started, we were had virtually no calls and after his crew got done we were substantially busy and have been consistently so very happy with him and his crew, and would recommend him anytime.",
+      ],
     },
     {
-      "id": 2,
-      "name": "Jesse Stosic",
-      "title": "Administrative Assistant",
-      "rating": 5,
-      "text": [
-        "I am so relieved, our Google business site is up and running again, and over a decade of work investments did not get lost thanks to Elijah from Corecentrix! He was incredibly patient with us, very knowledgeable, customer friendly and didn’t quit on us until specific accomplishments were completed! Superb services at very reasonable prices. I highly recommend Corecentrix and Elijah, they saved us a huge headache and helped us reopen our web doors. :)"
-      ]
-    }
+      id: 2,
+      name: "Jesse Stosic",
+      title: "Administrative Assistant",
+      rating: 5,
+      text: [
+        "I am so relieved, our Google business site is up and running again, and over a decade of work investments did not get lost thanks to Elijah from Corecentrix! He was incredibly patient with us, very knowledgeable, customer friendly and didn’t quit on us until specific accomplishments were completed! Superb services at very reasonable prices. I highly recommend Corecentrix and Elijah, they saved us a huge headache and helped us reopen our web doors. :)",
+      ],
+    },
   ];
-  
-  
 
   useLayoutEffect(() => {
     if (isPaused || !slideRefs.current[currentSlide]) return;
@@ -88,20 +116,23 @@ const Section9 = () => {
         <div className="w-full h-full">
           <div className="">
             <div className="text-center items-center justify-center flex flex-col">
-              <h1 className="w-[30%] max-sm:w-[80%] max-sm:mt-25 text-center p-8 pb-0 mt-16 text-2xl max-sm:text-2xl 2xl:text-6xl md:text-2xl font-bold">
+              <h1 className="w-[30%] max-sm:w-[80%] max-sm:mt-25 text-center p-8 pb-0 mt-16 text-2xl max-sm:text-2xl 2xl:text-6xl md:text-2xl font-bold text_animation_section9">
                 Real Revenue Impact for Our Clients
               </h1>
               <p className="w-[65%] 2xl:text-2xl text-center  px-0 mx-0 text-xl max-sm:text-sm mt-5 max-sm:mt-4 md:mt-[2%]">
-                <span className="text-5xl text-green-600">2X</span> Services :
-                Google My Business, Direct Marketing, Content Marketing,
-                Advertising Active Campaign
+                <span className="text-5xl text-green-600 text_animation_section9">
+                  2X
+                </span>{" "}
+                Services : Google My Business, Direct Marketing, Content
+                Marketing, Advertising Active Campaign
               </p>
             </div>
-             <Section9Card
-             key={details[currentSlide].id}
-             data={details[currentSlide]}
-             ref={(el) => (slideRefs.current[currentSlide] = el)}
-           />
+            <Section9Card
+              key={details[currentSlide].id}
+              data={details[currentSlide]}
+              ref={(el) => (slideRefs.current[currentSlide] = el)}
+              className="text_animation_section9"
+            />
             <button
               className="absolute left-[45%] max-sm:left-[54%] 2xl:bottom-50  md:left-[48%] bottom-10 max-sm:bottom-30 md:bottom-22 p-2 text-base max-sm:text-lg scale-125 max-sm:scale-130 font-bold text-white bg-opacity-50 cursor-pointer z-20"
               onClick={handlePrevClick}

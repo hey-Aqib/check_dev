@@ -1,14 +1,49 @@
+"use client"
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CircleAlert } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Section11 = () => {
+
+  gsap.registerPlugin(ScrollTrigger);
+  
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const elements = gsap.utils.toArray(".text_animation_section11");
+  
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+      });
+  
+      // Clean up scroll triggers when component unmounts
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    }, []);
+
+
   return (
     <div className="relative w-full h-full bg-black text-white px-[5%]">
-    <h1 className="w-[70%] max-sm:w-[100%] p-8 px-0 pb-0 pt-16 text-4xl max-sm:text-4xl leading-tight  md:text-6xl lg:text-7xl font-bold">
+    <h1 className="w-[70%] max-sm:w-[100%] p-8 px-0 pb-0 pt-16 text-4xl max-sm:text-4xl leading-tight  md:text-6xl lg:text-7xl font-bold text_animation_section11">
       Ready to Innovate with ForwardSols?
     </h1>
   
-    <p className="w-[52%] max-sm:w-[100%] px-0 mx-0 mt-7 text-xl ">
+    <p className="w-[52%] max-sm:w-[100%] px-0 mx-0 mt-7 text-xl text_animation_section11">
       Complete the form, and our team will reach out to discuss how we can
       create custom software solutions to meet your business needs.
     </p>
