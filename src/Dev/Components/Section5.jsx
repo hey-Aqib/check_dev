@@ -4,7 +4,6 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import PropTypes from "prop-types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -270,10 +269,6 @@ const Section5 = () => {
     </div>
   );
 };
-NeonCube.propTypes = {
-  position: PropTypes.arrayOf(PropTypes.number),
-  scale: PropTypes.number,
-  rotation: PropTypes.arrayOf(PropTypes.number),
-};
+
 
 export default Section5;
