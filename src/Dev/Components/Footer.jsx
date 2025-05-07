@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,7 +9,7 @@ const Footer = () => {
 
   gsap.registerPlugin(ScrollTrigger);
       
-        useEffect(() => {
+        useLayoutEffect(() => {
           requestAnimationFrame(() => {
             const elements = gsap.utils.toArray(".footer_animation_text");
       
@@ -37,7 +37,7 @@ const Footer = () => {
           };
         }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const moveCursor = (e) => {
       gsap.to(cursorRef.current, {
         x: e.clientX,

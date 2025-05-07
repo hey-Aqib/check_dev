@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, Suspense, useState } from "react";
+import React, { useRef, Suspense, useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import { PerformanceMonitor } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
 const LogoModel = ({ url, modelRef, visible, emissiveIntensity = 0 }) => {
   const { scene } = useLoader(GLTFLoader, url);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
@@ -52,7 +52,7 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
     }
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!leftModelRef?.current || !rightModelRef?.current) return;
 
     leftModelRef.current.position.set(-4, 0, 0);
@@ -151,7 +151,7 @@ const ScrollMerge3D = () => {
   const rightModelRef = useRef();
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     requestAnimationFrame(() => {
       const elements = gsap.utils.toArray(".fade-in_ani");
 
@@ -178,7 +178,7 @@ const ScrollMerge3D = () => {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {

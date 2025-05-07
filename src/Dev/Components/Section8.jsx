@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,7 +13,7 @@ const Section8 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
     
-      useEffect(() => {
+      useLayoutEffect(() => {
         requestAnimationFrame(() => {
           const elements = gsap.utils.toArray(".text_animation_section8");
     

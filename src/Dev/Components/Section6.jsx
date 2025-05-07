@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useLayoutEffect, useEffect } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,7 +11,7 @@ const Section6 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
   
-    useEffect(() => {
+    useLayoutEffect(() => {
       requestAnimationFrame(() => {
         const elements = gsap.utils.toArray(".fade-in-section6");
   

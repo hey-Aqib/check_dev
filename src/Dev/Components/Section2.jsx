@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, {  useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
 
@@ -15,7 +15,7 @@ const Section2 = () => {
   const about_top_height = useRef(-50);
   const Start = useRef("top bottom-=190");
 
-   useEffect(() => {
+   useLayoutEffect(() => {
       requestAnimationFrame(() => {
         const elements = gsap.utils.toArray(".tex_animation");
   
@@ -44,7 +44,7 @@ const Section2 = () => {
       };
     }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const winwidth = window.innerWidth;
 
     if (winwidth < 786) {

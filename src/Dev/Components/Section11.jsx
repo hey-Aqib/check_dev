@@ -2,13 +2,13 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CircleAlert } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 
 const Section11 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
   
-    useEffect(() => {
+    useLayoutEffect(() => {
       requestAnimationFrame(() => {
         const elements = gsap.utils.toArray(".text_animation_section11");
   

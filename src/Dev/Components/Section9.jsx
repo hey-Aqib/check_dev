@@ -12,7 +12,7 @@ const Section9 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     requestAnimationFrame(() => {
       const elements = gsap.utils.toArray(".text_animation_section9");
 

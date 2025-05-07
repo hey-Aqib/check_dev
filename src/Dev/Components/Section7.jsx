@@ -1,7 +1,7 @@
 "use client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, { useEffect } from "react";
+import React, {  useLayoutEffect } from "react";
 import { useState } from "react";
 
 const buttons = [
@@ -90,7 +90,7 @@ const Section7 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
   
-    useEffect(() => {
+    useLayoutEffect(() => {
       requestAnimationFrame(() => {
         const elements = gsap.utils.toArray(".text-animation");
   

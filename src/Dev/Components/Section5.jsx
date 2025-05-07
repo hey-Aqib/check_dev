@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { gsap } from "gsap";
@@ -63,7 +63,7 @@ const FloatingCubes = () => {
     ],
   }));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!groupRef.current) return;
 
     cubes.forEach((cube, i) => {
@@ -127,7 +127,7 @@ const PyramidObjects = () => {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!groupRef.current) return;
 
     cubes.forEach((cube, i) => {
@@ -172,7 +172,7 @@ const Section5 = () => {
 
   
   
-    useEffect(() => {
+    useLayoutEffect(() => {
       requestAnimationFrame(() => {
         const elements = gsap.utils.toArray(".fade-in-text");
   

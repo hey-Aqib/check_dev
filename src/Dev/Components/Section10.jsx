@@ -1,7 +1,7 @@
 "use client"
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 
 const Section10 = () => {
   function FancyCard({ title, description, image, button }) {
@@ -57,7 +57,7 @@ const Section10 = () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     requestAnimationFrame(() => {
       const elements = gsap.utils.toArray(".text_animation_section10");
 
