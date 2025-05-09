@@ -57,10 +57,11 @@ const Footer = () => {
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     const footertl = gsap.timeline({
       scrollTrigger: {
         trigger: footerRef.current,
-        start: window.innerWidth <= 768 ? "top+=200 center" : "top center",
+        start: window.innerWidth <= 768 ? "top+=200 center" : "center center",
         end: "bottom bottom",
         markers:true,
         toggleActions: "play none none reverse",
