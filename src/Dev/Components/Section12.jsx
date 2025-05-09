@@ -50,11 +50,11 @@ export default function Section12() {
         // INITIAL STATE
         gsap.set(svgRef.current, { autoAlpha: 0 });
         gsap.set(pandaRef.current, { autoAlpha: 0 });
-        gsap.set(logoRef.current, { x: "-100%", autoAlpha: 1 });
+        gsap.set(logoRef.current, { x: "100%", autoAlpha: 1 });
 
         // LOGO SCROLL ENTRY
         const logoTween = gsap.to(logoRef.current, {
-          x: "100%",
+          x: "-100%",
           duration: time.current,
           ease: "power2.out",
         });

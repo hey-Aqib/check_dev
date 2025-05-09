@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Footer = () => {
   const cursorRef = useRef(null);
+  const footerRef = useRef(null);
 
 
   gsap.registerPlugin(ScrollTrigger);
@@ -58,7 +59,7 @@ const Footer = () => {
     gsap.registerPlugin(ScrollTrigger);
     const footertl = gsap.timeline({
       scrollTrigger: {
-        trigger: "#footer",
+        trigger: footerRef.current,
         start: window.innerWidth <= 768 ? "top+=200 center" : "top+=200 center",
         end: "bottom bottom",
         markers:true,
@@ -99,6 +100,7 @@ const Footer = () => {
   return (
     <div
       id="footer"
+      ref={footerRef}
       className="footer relative w-full h-full bg-black pt-20 max-sm:pt-10 overflow-hidden"
     >
       <div className="w-full flex items-center pl-30">
