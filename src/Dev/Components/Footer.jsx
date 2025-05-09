@@ -61,6 +61,7 @@ const Footer = () => {
         trigger: "#footer",
         start: window.innerWidth <= 768 ? "top+=200 center" : "top+=200 center",
         end: "bottom bottom",
+        markers:true,
         toggleActions: "play none none reverse",
       },
     });

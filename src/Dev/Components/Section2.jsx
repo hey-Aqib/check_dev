@@ -1,8 +1,8 @@
 "use client";
 
-import React, {  useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import {ScrollTrigger} from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import imagesLoaded from "imagesloaded";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,13 +16,12 @@ const Section2 = () => {
   const about_top_height = useRef(-50);
   const Start = useRef("top bottom-=190");
 
-
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const wrapper = wrapperRef.current;
       imagesLoaded(wrapper, { background: true }, () => {
         const elements = gsap.utils.toArray(".tex_animation");
-  
+
         elements.forEach((el) => {
           gsap.fromTo(
             el,
@@ -39,25 +38,27 @@ const Section2 = () => {
             }
           );
         });
-  
+
         ScrollTrigger.refresh();
       });
     }, wrapperRef);
-  
-    return () => ctx.revert();
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());//here change to kill all triggers
+      ctx.revert();
+    };
   }, []);
-  
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const winwidth = window.innerWidth;
-  
+
       if (winwidth < 786) {
         about_bottom_height.current = 600;
         about_top_height.current = -240;
         Start.current = "top bottom-=250";
       }
-  
+
       imagesLoaded(wrapperRef.current, () => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -69,7 +70,7 @@ const Section2 = () => {
             markers: true,
           },
         });
-  
+
         tl.to(
           topRef.current,
           {
@@ -78,7 +79,7 @@ const Section2 = () => {
           },
           0
         );
-  
+
         tl.to(
           bottomRef.current,
           {
@@ -87,28 +88,30 @@ const Section2 = () => {
           },
           0
         );
-  
+
         tl.fromTo(
           textRef.current,
           { clipPath: "inset(52% 0 55% 0)" },
           { clipPath: "inset(0% 0 0% 0)", ease: "power2.out" },
           0.001
         );
-  
+
         ScrollTrigger.refresh();
       });
     }, wrapperRef);
-  
+
     return () => ctx.revert();
   }, []);
-  
 
   return (
     <section
       ref={wrapperRef}
       className="z-12 relative max-sm:pb-[60%] md:h-screen 2xl:h-screen/2 top-0 bg-black"
     >
-      <div ref={topRef} className="z-12 about-img-1 w-full will-change-transform">
+      <div
+        ref={topRef}
+        className="z-12 about-img-1 w-full will-change-transform"
+      >
         <img
           src="/dev/images/top_about.svg"
           alt="Top Reveal"
@@ -121,11 +124,11 @@ const Section2 = () => {
         className="absolute w-[80%] top-[30%] 2xl:w-[50%] max-sm:w-[80%] 2xl:top-[19%] md:top-[28%] max-sm:top-[23%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20 px-4"
       >
         <p className="text-white text-1xl max-sm:text-sm max-sm:mb-5 max-sm:mt-5 leading-relaxed font-light tex_animation">
-          3X More Revenue Growth with the Right Tools & the Right Team! Unlock the full
-          potential of your business with Corecentrix by your side, where expertise meets
-          innovation to drive unparalleled growth. Our cutting-edge tools, combined with a
-          team of seasoned professionals, are designed to propel your business towards
-          optimal revenue growth.
+          3X More Revenue Growth with the Right Tools & the Right Team! Unlock
+          the full potential of your business with Corecentrix by your side,
+          where expertise meets innovation to drive unparalleled growth. Our
+          cutting-edge tools, combined with a team of seasoned professionals,
+          are designed to propel your business towards optimal revenue growth.
         </p>
       </div>
 
