@@ -95,7 +95,7 @@ export default function Section12() {
             trigger: section,
             start: panda_start.current,
             end: "bottom center",
-            markers:true,
+            markers: true,
             scrub: 1,
             onEnter: () => gsap.to(pandaRef.current, { autoAlpha: 1 }),
             onLeaveBack: () => gsap.to(pandaRef.current, { autoAlpha: 0 }),
@@ -123,7 +123,10 @@ export default function Section12() {
       });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -166,8 +169,8 @@ export default function Section12() {
         />
 
         <p className="absolute text-center text-white bottom-[5%] xl:bottom-[12%] md:bottom-[17%] lg:bottom-[13%] 2xl:bottom-[10%] right-[30%] text-xl max-sm:text-sm 2xl:text-4xl md:text-1xl lg:text-2xl font-medium w-[43%] xl:w-[43%] lg:w-[48%] 2xl:[50%] text_animation_section12">
-          We Had to put the panda somewhere, so what if it's not in our logo,
-          we still love them.
+          We Had to put the panda somewhere, so what if it's not in our logo, we
+          still love them.
         </p>
       </div>
     </div>

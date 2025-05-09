@@ -99,7 +99,10 @@ const Section3 = () => {
        });
      }, sectionRef);
    
-     return () => ctx.revert();
+     return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
+    };
    }, []);
 
   return (
