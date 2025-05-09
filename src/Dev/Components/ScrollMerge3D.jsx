@@ -10,6 +10,8 @@ import { PerspectiveCamera, Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Galaxy } from "./GalaxyBackground";
+import imagesLoaded from "imagesloaded";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -152,9 +154,11 @@ const ScrollMerge3D = () => {
   const [progress, setProgress] = useState(0);
 
   useLayoutEffect(() => {
-    requestAnimationFrame(() => {
+    const imgLoad = imagesLoaded(containerRef.current);
+  
+    imgLoad.on("done", () => {
       const elements = gsap.utils.toArray(".fade-in_ani");
-
+  
       elements.forEach((el) => {
         gsap.fromTo(
           el,
@@ -172,11 +176,12 @@ const ScrollMerge3D = () => {
         );
       });
     });
-
+  
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+  
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
