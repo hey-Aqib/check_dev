@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import DesktopMenu from "./DesktopMenu";
 
@@ -68,6 +68,13 @@ import {
 import MobMenu from "./MobMenu";
 
 const Header = () => {
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  
   const Menus = [
     {
       id: 1,

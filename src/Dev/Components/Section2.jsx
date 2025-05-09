@@ -3,6 +3,7 @@
 import React, {  useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
+import imagesLoaded from "imagesloaded";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,8 +16,11 @@ const Section2 = () => {
   const about_top_height = useRef(-50);
   const Start = useRef("top bottom-=190");
 
-   useLayoutEffect(() => {
-      requestAnimationFrame(() => {
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const wrapper = wrapperRef.current;
+      imagesLoaded(wrapper, { background: true }, () => {
         const elements = gsap.utils.toArray(".tex_animation");
   
         elements.forEach((el) => {
@@ -35,67 +39,69 @@ const Section2 = () => {
             }
           );
         });
+  
         ScrollTrigger.refresh();
       });
+    }, wrapperRef);
   
-      // Clean up scroll triggers when component unmounts
-      return () => {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
-    }, []);
+    return () => ctx.revert();
+  }, []);
+  
 
   useLayoutEffect(() => {
-    const winwidth = window.innerWidth;
-
-    if (winwidth < 786) {
-      about_bottom_height.current = 600;
-      about_top_height.current = -240;
-      Start.current = "top bottom-=250";
-    }
-
-    requestAnimationFrame(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: Start.current,
-          end: "bottom center",
-          scrub: true,
-          pinSpacing: false,
-          markers: true
-        },
+    const ctx = gsap.context(() => {
+      const winwidth = window.innerWidth;
+  
+      if (winwidth < 786) {
+        about_bottom_height.current = 600;
+        about_top_height.current = -240;
+        Start.current = "top bottom-=250";
+      }
+  
+      imagesLoaded(wrapperRef.current, () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: Start.current,
+            end: "bottom center",
+            scrub: true,
+            pinSpacing: false,
+            markers: true,
+          },
+        });
+  
+        tl.to(
+          topRef.current,
+          {
+            yPercent: about_top_height.current,
+            ease: "power2.out",
+          },
+          0
+        );
+  
+        tl.to(
+          bottomRef.current,
+          {
+            yPercent: about_bottom_height.current,
+            ease: "power2.out",
+          },
+          0
+        );
+  
+        tl.fromTo(
+          textRef.current,
+          { clipPath: "inset(52% 0 55% 0)" },
+          { clipPath: "inset(0% 0 0% 0)", ease: "power2.out" },
+          0.001
+        );
+  
+        ScrollTrigger.refresh();
       });
-
-      tl.to(
-        topRef.current,
-        {
-          yPercent: about_top_height.current,
-          ease: "power2.out",
-        },
-        0
-      );
-
-      tl.to(
-        bottomRef.current,
-        {
-          yPercent: about_bottom_height.current,
-          ease: "power2.out",
-        },
-        0
-      );
-
-      tl.fromTo(
-        textRef.current,
-        { clipPath: "inset(52% 0 55% 0)" },
-        { clipPath: "inset(0% 0 0% 0)", ease: "power2.out" },
-        0.001
-      );
-      ScrollTrigger.refresh();
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+    }, wrapperRef);
+  
+    return () => ctx.revert();
   }, []);
+  
 
   return (
     <section
