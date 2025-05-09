@@ -27,6 +27,7 @@ const Footer = () => {
               scrollTrigger: {
                 trigger: el,
                 start: "top 85%",
+                markers:true,
                 toggleActions: "play none none reverse",
               },
             }
