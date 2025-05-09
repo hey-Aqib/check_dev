@@ -95,7 +95,6 @@ export default function Section12() {
             trigger: section,
             start: panda_start.current,
             end: "bottom center",
-            markers: true,
             scrub: 1,
             onEnter: () => gsap.to(pandaRef.current, { autoAlpha: 1 }),
             onLeaveBack: () => gsap.to(pandaRef.current, { autoAlpha: 0 }),
