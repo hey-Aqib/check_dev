@@ -2,6 +2,8 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import imagesLoaded from "imagesloaded";
+
 
 
 
@@ -66,35 +68,39 @@ const Section3 = () => {
     },
   ];
 
+
+  //.fade-in
   gsap.registerPlugin(ScrollTrigger);
 
-  useLayoutEffect(() => {
-    requestAnimationFrame(() => {
-      const elements = gsap.utils.toArray(".fade-in");
-
-      elements.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-    });
-
-    // Clean up scroll triggers when component unmounts
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+ useLayoutEffect(() => {
+     const ctx = gsap.context(() => {
+       const section  = sectionRef.current;
+       imagesLoaded(section , { background: true }, () => {
+         const elements = gsap.utils.toArray(".fade-in");
+   
+         elements.forEach((el) => {
+           gsap.fromTo(
+             el,
+             { opacity: 0, y: 50 },
+             {
+               opacity: 1,
+               y: 0,
+               duration: 1,
+               scrollTrigger: {
+                 trigger: el,
+                 start: "top 85%",
+                 toggleActions: "play none none reverse",
+               },
+             }
+           );
+         });
+   
+         ScrollTrigger.refresh();
+       });
+     }, sectionRef);
+   
+     return () => ctx.revert();
+   }, []);
 
   return (
     <div ref={sectionRef} className="bg-black text-white">
