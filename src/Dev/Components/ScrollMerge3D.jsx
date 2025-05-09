@@ -12,7 +12,6 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Galaxy } from "./GalaxyBackground";
 import imagesLoaded from "imagesloaded";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 /* eslint-disable react/no-unknown-property */
@@ -36,8 +35,8 @@ const LogoModel = ({ url, modelRef, visible, emissiveIntensity = 0 }) => {
 LogoModel.propTypes = {
   url: PropTypes.string.isRequired,
   modelRef: PropTypes.oneOfType([
-    PropTypes.func, 
-    PropTypes.shape({ current: PropTypes.any })
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
   ]).isRequired,
   visible: PropTypes.bool.isRequired,
   emissiveIntensity: PropTypes.number,
@@ -138,12 +137,12 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
 Scene.propTypes = {
   progress: PropTypes.number.isRequired,
   leftModelRef: PropTypes.oneOfType([
-    PropTypes.func, 
-    PropTypes.shape({ current: PropTypes.any })
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
   ]).isRequired,
   rightModelRef: PropTypes.oneOfType([
-    PropTypes.func, 
-    PropTypes.shape({ current: PropTypes.any })
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
   ]).isRequired,
 };
 
@@ -153,52 +152,66 @@ const ScrollMerge3D = () => {
   const rightModelRef = useRef();
   const [progress, setProgress] = useState(0);
 
-  useLayoutEffect(() => {
-    const imgLoad = imagesLoaded(containerRef.current);
-  
-    imgLoad.on("done", () => {
-      const elements = gsap.utils.toArray(".fade-in_ani");
-  
-      elements.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-    });
-  
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-  
+  //.fade-in_ani
 
   useLayoutEffect(() => {
-    if (!containerRef.current) return;
-
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1,
-        markers: true,
-        onUpdate: (self) => {
-          setProgress(self.progress);
-        },
+      const section = containerRef.current;
+      imagesLoaded(section, { background: true }, () => {
+        const elements = gsap.utils.toArray(".fade-in_ani");
+
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+
+        ScrollTrigger.refresh();
       });
     }, containerRef);
 
+    return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const section = containerRef.current;
+      if (!section) return;
+  
+      // Immediate trigger with provisional values
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top center",
+        end: "bottom center",
+        scrub: 1,
+        markers: true,
+        onUpdate: (self) => setProgress(self.progress),
+        refreshPriority: -1
+      });
+  
+      // Refine after assets load
+      const imgLoad = imagesLoaded(section, { background: true }, () => {
+        ScrollTrigger.refresh();
+        trigger.refresh();
+      });
+  
+      return () => {
+        imgLoad?.off('done');
+        trigger?.kill();
+      };
+    }, containerRef);
+  
     return () => ctx.revert();
   }, []);
 
@@ -248,25 +261,25 @@ const ScrollMerge3D = () => {
       <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-30">
         {progress < 0.5 ? (
           <h1 className="text-4xl md:text-3xl font-bold text-white text-center px-4 fade-in_ani">
-            <p> 
+            <p>
               <span className="block">We have worked with</span> some of the
               biggest names in USA
             </p>
           </h1>
         ) : (
           <div>
-              <div className="absolute inset-0 z-[-1] h-[150vh] max-sm:h-[125vh] w-full top-[-50]">
-                <Canvas
-                  camera={{ position: [0, 0, 10] }}
-                  dpr={[1, 1.5]}
-                  gl={{ powerPreference: "high-performance", antialias: false }}
-                >
-                  <PerformanceMonitor onDecline={() => {}} />
-                  <Suspense fallback={null}>
-                    <Galaxy count={6000} radius={10} />
-                  </Suspense>
-                </Canvas>
-              </div>
+            <div className="absolute inset-0 z-[-1] h-[150vh] max-sm:h-[125vh] w-full top-[-50]">
+              <Canvas
+                camera={{ position: [0, 0, 10] }}
+                dpr={[1, 1.5]}
+                gl={{ powerPreference: "high-performance", antialias: false }}
+              >
+                <PerformanceMonitor onDecline={() => {}} />
+                <Suspense fallback={null}>
+                  <Galaxy count={6000} radius={10} />
+                </Suspense>
+              </Canvas>
+            </div>
             <div className="flex items-center justify-center w-full relative z-100">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-sm:grid-cols-2 max-sm:gap-4 w-[80%]">
                 {data.map((item, index) => (
