@@ -185,34 +185,35 @@ const ScrollMerge3D = () => {
   }, []);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const section = containerRef.current;
-      if (!section) return;
+    let ctx;
+    let trigger;
+    let loadTimeout;
   
-      // Immediate trigger with provisional values
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top center",
-        end: "bottom center",
-        scrub: 1,
-        markers: true,
-        onUpdate: (self) => setProgress(self.progress),
-        refreshPriority: -1
-      });
+    const initScrollTrigger = () => {
+      ctx = gsap.context(() => {
+        const section = containerRef.current;
+        if (!section) return;
   
-      // Refine after assets load
-      const imgLoad = imagesLoaded(section, { background: true }, () => {
-        ScrollTrigger.refresh();
-        trigger.refresh();
-      });
+        trigger = ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          scrub: 1,
+          onUpdate: (self) => setProgress(self.progress),
+          markers: true
+        });
+      }, containerRef);
+    };
   
-      return () => {
-        imgLoad?.off('done');
-        trigger?.kill();
-      };
-    }, containerRef);
+    // Initialize after images load (with fallback)
+    loadTimeout = setTimeout(initScrollTrigger, 1000);
+    imagesLoaded(containerRef.current, { background: true }, initScrollTrigger);
   
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(loadTimeout);
+      trigger?.kill(); // Kill ScrollTrigger first
+      ctx?.revert();   // Then revert GSAP context
+    };
   }, []);
 
   const data = [
