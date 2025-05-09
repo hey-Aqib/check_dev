@@ -1,129 +1,129 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import imagesLoaded from "imagesloaded";
 
 export default function Section12() {
   const pandaRef = useRef(null);
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const logoRef = useRef(null);
-  const Container_Start = useRef("top top")
-  const panda_start = useRef("35% center")
-  const time = useRef(5)
+  const Container_Start = useRef("top top");
+  const panda_start = useRef("35% center");
+  const time = useRef(5);
 
-  gsap.registerPlugin(ScrollTrigger);
-    
-      useLayoutEffect(() => {
-        requestAnimationFrame(() => {
-          const elements = gsap.utils.toArray(".text_animation_section12");
-    
-          elements.forEach((el) => {
-            gsap.fromTo(
-              el,
-              { opacity: 0, y: 50 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                scrollTrigger: {
-                  trigger: el,
-                  start: "top 85%",
-                  toggleActions: "play none none reverse",
-                },
-              }
-            );
-          });
-        });
-    
-        // Clean up scroll triggers when component unmounts
-        return () => {
-          ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-        };
-      }, []);
+  gsap.registerPlugin(MotionPathPlugin, ScrollTrigger);
 
   useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const section = containerRef.current;
 
-    gsap.registerPlugin(MotionPathPlugin, ScrollTrigger);
+      imagesLoaded(section, { background: true }, () => {
+        // TEXT FADE-IN ANIMATION
+        const elements = gsap.utils.toArray(".text_animation_section12");
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
 
-    gsap.set(svgRef.current, { autoAlpha: 0 });
-    gsap.set(pandaRef.current, { autoAlpha: 0 });
-    gsap.set(logoRef.current, { x: "-100%", autoAlpha: 1 });
-
-    if(window.innerWidth < 768) {
-      Container_Start.current = "30% center"
-      panda_start.current = "30% center"
-      time.current = 3
-    }
-
-    const logoTween = gsap.to(logoRef.current, {
-      x: "100%",
-      duration: time.current,
-      ease: "power2.out",
-    });
-
-    ScrollTrigger.create({
-      trigger: containerRef.current, 
-      start: Container_Start.current,
-      end: "bottom bottom",
-      onUpdate: (self) => {
-        if (self.direction === -1) {
-          logoTween.reverse();
-        } else {
-          logoTween.play();
+        // RESPONSIVE SETTINGS
+        if (window.innerWidth < 768) {
+          Container_Start.current = "30% center";
+          panda_start.current = "30% center";
+          time.current = 3;
         }
-      },
-    });
 
-    ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: Container_Start.current,   
-      end: "20% center",
-      scrub: true,
-      onUpdate: (self) => {
-        if (self.progress >= 1) {
-          gsap.to(logoRef.current, { autoAlpha: 0 });
-          gsap.to(svgRef.current, { autoAlpha: 1 });
-        } else {
-          gsap.to(logoRef.current, { autoAlpha: 1 });
-          gsap.to(svgRef.current, { autoAlpha: 0 });
-        }
-      },
-    });
+        // INITIAL STATE
+        gsap.set(svgRef.current, { autoAlpha: 0 });
+        gsap.set(pandaRef.current, { autoAlpha: 0 });
+        gsap.set(logoRef.current, { x: "-100%", autoAlpha: 1 });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: panda_start.current,
-        end: "bottom center",
-        scrub: 1,
-        onEnter: () => gsap.to(pandaRef.current, { autoAlpha: 1 }),
-        onLeaveBack: () => gsap.to(pandaRef.current, { autoAlpha: 0 }),
-      },
-    });
+        // LOGO SCROLL ENTRY
+        const logoTween = gsap.to(logoRef.current, {
+          x: "100%",
+          duration: time.current,
+          ease: "power2.out",
+        });
 
-    tl.to(
-      pandaRef.current,
-      {
-        duration: 3,
-        motionPath: {
-          path: "#motionPath",
-          align: "#motionPath",
-          alignOrigin: [0.5, 0.5],
-          autoRotate: true,
-          start: 0.3,
-          end: 0.1,
-        },
-        ease: "power2.inOut",
-      },
-      "<"
-    );
+        ScrollTrigger.create({
+          trigger: section,
+          start: Container_Start.current,
+          end: "bottom bottom",
+          onUpdate: (self) => {
+            if (self.direction === -1) {
+              logoTween.reverse();
+            } else {
+              logoTween.play();
+            }
+          },
+        });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      tl.kill();
-    };
+        // LOGO HIDE / SVG SHOW
+        ScrollTrigger.create({
+          trigger: section,
+          start: Container_Start.current,
+          end: "20% center",
+          scrub: true,
+          onUpdate: (self) => {
+            if (self.progress >= 1) {
+              gsap.to(logoRef.current, { autoAlpha: 0 });
+              gsap.to(svgRef.current, { autoAlpha: 1 });
+            } else {
+              gsap.to(logoRef.current, { autoAlpha: 1 });
+              gsap.to(svgRef.current, { autoAlpha: 0 });
+            }
+          },
+        });
+
+        // PANDA MOTION PATH
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: panda_start.current,
+            end: "bottom center",
+            markers:true,
+            scrub: 1,
+            onEnter: () => gsap.to(pandaRef.current, { autoAlpha: 1 }),
+            onLeaveBack: () => gsap.to(pandaRef.current, { autoAlpha: 0 }),
+          },
+        });
+
+        tl.to(
+          pandaRef.current,
+          {
+            duration: 3,
+            motionPath: {
+              path: "#motionPath",
+              align: "#motionPath",
+              alignOrigin: [0.5, 0.5],
+              autoRotate: true,
+              start: 0.3,
+              end: 0.1,
+            },
+            ease: "power2.inOut",
+          },
+          "<"
+        );
+
+        ScrollTrigger.refresh();
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (

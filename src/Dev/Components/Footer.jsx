@@ -3,39 +3,43 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import imagesLoaded from "imagesloaded";
+
 const Footer = () => {
   const cursorRef = useRef(null);
-
+  const footerRef = useRef(null); // New ref to scope imagesLoaded
 
   gsap.registerPlugin(ScrollTrigger);
-      
-        useLayoutEffect(() => {
-          requestAnimationFrame(() => {
-            const elements = gsap.utils.toArray(".footer_animation_text");
-      
-            elements.forEach((el) => {
-              gsap.fromTo(
-                el,
-                { opacity: 0, y: 50 },
-                {
-                  opacity: 1,
-                  y: 0,
-                  duration: 1,
-                  scrollTrigger: {
-                    trigger: el,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse",
-                  },
-                }
-              );
-            });
-          });
-      
-          // Clean up scroll triggers when component unmounts
-          return () => {
-            ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-          };
-        }, []);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const loader = imagesLoaded(footerRef.current, { background: true }, () => {
+        const elements = gsap.utils.toArray(".footer_animation_text");
+
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        });
+      });
+    }, footerRef);
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const moveCursor = (e) => {
@@ -48,14 +52,10 @@ const Footer = () => {
     };
 
     window.addEventListener("mousemove", moveCursor);
-
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-    };
+    return () => window.removeEventListener("mousemove", moveCursor);
   }, []);
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger);
     const footertl = gsap.timeline({
       scrollTrigger: {
         trigger: "#footer",
@@ -91,13 +91,13 @@ const Footer = () => {
         ease: "power2.inOut",
       });
   });
-
   //     Footer Hand Animation   ----------------
   //     [Left Hand] starts off-screen left → slides in → pauses → slides back out left
   //     [Right Hand] starts off-screen right → slides in → pauses → slides back out right
   return (
     <div
       id="footer"
+      ref={footerRef}
       className="footer relative w-full h-full bg-black pt-20 max-sm:pt-10 overflow-hidden"
     >
       <div className="w-full flex items-center pl-30">
