@@ -60,7 +60,7 @@ const Footer = () => {
     const footertl = gsap.timeline({
       scrollTrigger: {
         trigger: footerRef.current,
-        start: window.innerWidth <= 768 ? "top+=200 center" : "top+=200 center",
+        start: window.innerWidth <= 768 ? "top+=200 center" : "top center",
         end: "bottom bottom",
         markers:true,
         toggleActions: "play none none reverse",
