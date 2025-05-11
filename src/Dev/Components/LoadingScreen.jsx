@@ -40,7 +40,7 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black h-screen">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black max-h-screen">
       {showCanvas && (
         <div className="fixed inset-0 z-[-1] pointer-events-none">
           <Canvas

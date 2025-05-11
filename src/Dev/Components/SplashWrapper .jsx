@@ -11,13 +11,32 @@ export default function SplashWrapper({ children }) {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname(); 
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 3000); 
+useEffect(() => {
+  const load = async () => {
+    const start = Date.now();
 
-    return () => clearTimeout(timeout);
-  }, []); 
+    // Start preloading components
+    await Promise.all([
+      import('./navbar/Header'),
+      import('./Footer'),
+    ]);
+
+    // Ensure at least X ms of loading screen (e.g. 1500ms)
+    const elapsed = Date.now() - start;
+    const minLoadingTime = 3000;
+
+    const remaining = minLoadingTime - elapsed;
+    if (remaining > 0) {
+      setTimeout(() => setLoading(false), remaining);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  load();
+}, []);
+
+
 
   return (
     <>
@@ -31,7 +50,7 @@ export default function SplashWrapper({ children }) {
         {!loading && 
         <Suspense fallback={null}>
           <Header />
-          {!loading && children}
+          {children}
           <Footer key={pathname}/> 
         </Suspense>}
       </div>
