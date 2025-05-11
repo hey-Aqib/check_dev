@@ -1,10 +1,10 @@
-'use client';
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { usePathname } from 'next/navigation';
-import LoadingScreen from './LoadingScreen';
+"use client";
+import { useState, useEffect, lazy, Suspense } from "react";
+import { usePathname } from "next/navigation";
+import LoadingScreen from "./LoadingScreen";
 
-const Header = lazy(() => import('./navbar/Header'));
-const Footer = lazy(() => import('./Footer'));
+const Header = lazy(() => import("./navbar/Header"));
+const Footer = lazy(() => import("./Footer"));
 
 export default function SplashWrapper({ children }) {
   const [isReady, setIsReady] = useState(false);
@@ -32,15 +32,15 @@ export default function SplashWrapper({ children }) {
       checkReady();
     };
 
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       onLoad(); // in case load already happened
     } else {
-      window.addEventListener('load', onLoad);
+      window.addEventListener("load", onLoad);
     }
 
     return () => {
       clearTimeout(delayTimer);
-      window.removeEventListener('load', onLoad);
+      window.removeEventListener("load", onLoad);
     };
   }, []);
 
@@ -53,7 +53,7 @@ export default function SplashWrapper({ children }) {
       )}
 
       {isReady && (
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={null}>
           <Header />
           {children}
           <Footer key={pathname} />
