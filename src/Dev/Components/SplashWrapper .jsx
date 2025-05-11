@@ -3,57 +3,54 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { usePathname } from 'next/navigation'; 
 import LoadingScreen from './LoadingScreen';
 
-// Lazy-loaded components
 const Header = lazy(() => import('./navbar/Header'));
 const Footer = lazy(() => import('./Footer'));
 
 export default function SplashWrapper({ children }) {
   const [loading, setLoading] = useState(true);
+  const [showApp, setShowApp] = useState(false);
   const pathname = usePathname(); 
 
-useEffect(() => {
-  const load = async () => {
-    const start = Date.now();
-
-    // Start preloading components
-    await Promise.all([
-      import('./navbar/Header'),
-      import('./Footer'),
-    ]);
-
-    // Ensure at least X ms of loading screen (e.g. 1500ms)
-    const elapsed = Date.now() - start;
-    const minLoadingTime = 3000;
-
-    const remaining = minLoadingTime - elapsed;
-    if (remaining > 0) {
-      setTimeout(() => setLoading(false), remaining);
-    } else {
+  useEffect(() => {
+    const load = async () => {
+      // Simulate preload time (or use real imports)
+      await new Promise((res) => setTimeout(res, 1500));
       setLoading(false);
-    }
-  };
 
-  load();
-}, []);
+      // Add a small delay for app mount transition
+      setTimeout(() => {
+        setShowApp(true);
+      }, 1000); // during this 1s, show your delightful loader
+    };
 
-
+    load();
+  }, []);
 
   return (
     <>
+      {/* Initial loading screen */}
       {loading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black text-white transition-opacity duration-1000 opacity-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white">
           <LoadingScreen />
         </div>
       )}
 
-      <div className={`transition-opacity duration-1000 ${loading ? 'opacity-0' : 'opacity-100'}`}>
-        {!loading && 
+      {/* Transition loader after splash */}
+      {!loading && !showApp && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black">
+          {/* Delightful loader (replace with spinner or logo animation) */}
+          <img src="/dev/images/delightful-loader.gif" alt="Loading..." className="w-20 h-20" />
+        </div>
+      )}
+
+      {/* Actual app content */}
+      {showApp && (
         <Suspense fallback={null}>
           <Header />
           {children}
-          <Footer key={pathname}/> 
-        </Suspense>}
-      </div>
+          <Footer key={pathname} />
+        </Suspense>
+      )}
     </>
   );
 }
