@@ -59,7 +59,7 @@ const Footer = () => {
       scrollTrigger: {
         trigger: footerRef.current,
         start: "top bottom", // ✅ Start when footer just enters
-        end: "bottom top",
+        end: "center bottom",
         scrub: false,
         markers: true,
         toggleActions: "play none none reverse",
