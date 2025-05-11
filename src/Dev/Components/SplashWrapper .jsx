@@ -1,53 +1,41 @@
-"use client";
-import { useState, useEffect, lazy, Suspense } from "react";
-import { usePathname } from "next/navigation";
-import LoadingScreen from "./LoadingScreen";
+'use client';
+import { useEffect, useState, lazy, Suspense } from 'react';
+import { usePathname } from 'next/navigation';
+import LoadingScreen from './LoadingScreen';
 
-const Header = lazy(() => import("./navbar/Header"));
-const Footer = lazy(() => import("./Footer"));
+// Lazy-loaded components
+const Header = lazy(() => import('./navbar/Header'));
+const Footer = lazy(() => import('./Footer'));
 
 export default function SplashWrapper({ children }) {
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    let minDelayFinished = false;
-    let siteLoaded = false;
+    const waitForPageLoad = () =>
+      new Promise((resolve) => {
+        if (document.readyState === 'complete') {
+          resolve();
+        } else {
+          window.addEventListener('load', resolve);
+        }
+      });
 
-    const checkReady = () => {
-      if (minDelayFinished && siteLoaded) {
-        setIsReady(true);
-      }
-    };
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Minimum delay of 2 seconds
-    const delayTimer = setTimeout(() => {
-      minDelayFinished = true;
-      checkReady();
-    }, 2000);
-
-    // Wait for window to fully load
-    const onLoad = () => {
-      siteLoaded = true;
-      checkReady();
-    };
-
-    if (document.readyState === "complete") {
-      onLoad(); // in case load already happened
-    } else {
-      window.addEventListener("load", onLoad);
-    }
+    Promise.all([waitForPageLoad(), minDelay]).then(() => {
+      setIsReady(true);
+    });
 
     return () => {
-      clearTimeout(delayTimer);
-      window.removeEventListener("load", onLoad);
+      window.removeEventListener('load', () => {});
     };
   }, []);
 
   return (
     <>
       {!isReady && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black text-white">
           <LoadingScreen />
         </div>
       )}
