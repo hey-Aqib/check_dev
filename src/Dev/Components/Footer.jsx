@@ -26,7 +26,7 @@ const Footer = () => {
             scrollTrigger: {
               trigger: el,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -61,7 +61,6 @@ const Footer = () => {
         start: "top bottom", // ✅ Start when footer just enters
         end: "center bottom",
         scrub: false,
-        markers: true,
         toggleActions: "play none none reverse",
       },
     });

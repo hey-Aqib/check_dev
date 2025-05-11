@@ -67,7 +67,6 @@ const Section2 = () => {
             end: "bottom center",
             scrub: true,
             pinSpacing: false,
-            markers: true,
           },
         });
 

@@ -218,7 +218,6 @@ const ScrollMerge3D = () => {
           end: "bottom center",
           scrub: 1,
           onUpdate: (self) => setProgress(self.progress),
-          markers: true,
         });
       }, containerRef);
     };
