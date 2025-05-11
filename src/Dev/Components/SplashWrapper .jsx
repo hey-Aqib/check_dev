@@ -28,11 +28,12 @@ export default function SplashWrapper({ children }) {
       )}
 
       <div className={`transition-opacity duration-1000 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+        {!loading && 
         <Suspense fallback={null}>
           <Header />
           {!loading && children}
           <Footer key={pathname}/> 
-        </Suspense>
+        </Suspense>}
       </div>
     </>
   );
