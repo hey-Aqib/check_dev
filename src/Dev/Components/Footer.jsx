@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -59,7 +59,6 @@ const Footer = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     let trigger;
-    let loadTimeout;
     let ctx;
 
     const initScrollTrigger = () => {
@@ -103,16 +102,14 @@ const Footer = () => {
       }, footerRef);
     };
 
-    // Set fallback timeout
-    loadTimeout = setTimeout(initScrollTrigger, 1000);
-
-    // Run after images load (with background)
-    imagesLoaded(footerRef.current, { background: true }, initScrollTrigger);
+    imagesLoaded(footerRef.current, { background: true }, () => {
+      initScrollTrigger();
+      ScrollTrigger.refresh(); // Recalculate triggers after layout settles
+    });
 
     return () => {
-      clearTimeout(loadTimeout); // Kill timeout first
-      trigger?.scrollTrigger?.kill(); // Kill ScrollTrigger safely
-      ctx?.revert(); // Revert GSAP context
+      trigger?.scrollTrigger?.kill();
+      ctx?.revert();
     };
   });
 
