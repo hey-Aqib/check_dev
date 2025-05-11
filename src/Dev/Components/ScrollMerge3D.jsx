@@ -1,5 +1,11 @@
 "use client";
-import React, { useRef, Suspense, useState, useLayoutEffect, useMemo } from "react";
+import React, {
+  useRef,
+  Suspense,
+  useState,
+  useLayoutEffect,
+  useMemo,
+} from "react";
 import PropTypes from "prop-types";
 import { PerformanceMonitor } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
@@ -11,7 +17,6 @@ import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Galaxy } from "./GalaxyBackground";
 import imagesLoaded from "imagesloaded";
-import { RGBELoader } from 'three-stdlib';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,9 +76,9 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
       leftModelRef.current.position.x = -4 + 4 * moveProgress;
       rightModelRef.current.position.x = 4 - 4 * moveProgress;
 
-      const intensity = reverseGlow * 15;
+      const intensity = reverseGlow * 45;
       setEmissiveIntensity(intensity);
-      setBloomIntensity(reverseGlow * 0.9);
+      setBloomIntensity(reverseGlow * 2.5);
 
       const colorValue = 70 + reverseGlow * 30;
 
@@ -97,12 +102,14 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
     }
   }, [progress, leftModelRef, rightModelRef]);
 
-
-   const blackTexture = useMemo(() => {
-    const data = new Uint8Array([0, 0, 0, 255]); // RGBA (black)
-    const texture = new THREE.DataTexture(data, 1, 1, THREE.RGBAFormat);
-    texture.needsUpdate = true;
-    return texture;
+  const blackTexture = useMemo(() => {
+   const texture = new THREE.DataTexture(
+    new Uint8Array([128, 128, 128, 255]), // Neutral gray
+    1, 1,
+    THREE.RGBAFormat
+  );
+  texture.needsUpdate = true;
+  return texture;
   }, []);
 
   return (
@@ -115,15 +122,17 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
         makeDefault
         position={[0, 0, 10]}
       />
-      <Environment  map={blackTexture} background  />
+       <color attach="background" args={["#000000"]} />
+      <Environment map={blackTexture} background={false} />
 
       <EffectComposer>
         <Bloom
           intensity={bloomIntensity}
-          kernelSize={3}
+          kernelSize={4}
           luminanceThreshold={0}
-          luminanceSmoothing={0.4}
+          luminanceSmoothing={0.2}
           height={300}
+          
         />
       </EffectComposer>
 
@@ -197,31 +206,31 @@ const ScrollMerge3D = () => {
     let ctx;
     let trigger;
     let loadTimeout;
-  
+
     const initScrollTrigger = () => {
       ctx = gsap.context(() => {
         const section = containerRef.current;
         if (!section) return;
-  
+
         trigger = ScrollTrigger.create({
           trigger: section,
           start: "top center",
           end: "bottom center",
           scrub: 1,
           onUpdate: (self) => setProgress(self.progress),
-          markers: true
+          markers: true,
         });
       }, containerRef);
     };
-  
+
     // Initialize after images load (with fallback)
     loadTimeout = setTimeout(initScrollTrigger, 1000);
     imagesLoaded(containerRef.current, { background: true }, initScrollTrigger);
-  
+
     return () => {
       clearTimeout(loadTimeout);
       trigger?.kill(); // Kill ScrollTrigger first
-      ctx?.revert();   // Then revert GSAP context
+      ctx?.revert(); // Then revert GSAP context
     };
   }, []);
 
@@ -249,7 +258,7 @@ const ScrollMerge3D = () => {
       ref={containerRef}
       className="relative w-full h-[150vh] max-sm:h-[120vh] bg-black"
     >
-      <div className="sticky top-0 h-screen w-full max-sm:hidden">
+      <div className="sticky top-0  h-screen w-full max-sm:hidden">
         <Canvas
           frameloop="demand"
           dpr={[1, 1.5]}

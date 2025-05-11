@@ -3,40 +3,40 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import imagesLoaded from "imagesloaded";
 const Footer = () => {
   const cursorRef = useRef(null);
   const footerRef = useRef(null);
 
-
   gsap.registerPlugin(ScrollTrigger);
-      
-        useLayoutEffect(() => {
-          requestAnimationFrame(() => {
-            const elements = gsap.utils.toArray(".footer_animation_text");
-      
-            elements.forEach((el) => {
-              gsap.fromTo(
-                el,
-                { opacity: 0, y: 50 },
-                {
-                  opacity: 1,
-                  y: 0,
-                  duration: 1,
-                  scrollTrigger: {
-                    trigger: el,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse",
-                  },
-                }
-              );
-            });
-          });
-      
-          // Clean up scroll triggers when component unmounts
-          return () => {
-            ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-          };
-        }, []);
+
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".footer_animation_text");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    });
+
+    // Clean up scroll triggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const moveCursor = (e) => {
@@ -57,42 +57,63 @@ const Footer = () => {
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    const footertl = gsap.timeline({
-      scrollTrigger: {
-        trigger: footerRef.current,
-        start: window.innerWidth <= 768 ? "top+=200 center" : "center center",
-        end: "bottom bottom",
-        markers:true,
-        toggleActions: "play none none reverse",
-      },
-    });
 
-    footertl
-      .fromTo(
-        ["#LeftHand", "#RightHand"],
-        {
-          x: (i) => (i === 0 ? "-100%" : "100%"),
-          opacity: 1,
-        },
-        {
-          x: "0%",
-          opacity: 1,
-          duration: 1,
-          ease: "power2.inOut",
-        }
-      )
-      .to(["#LeftHand", "#RightHand"], {
-        x: "0%",
-        opacity: 1,
-        duration: 1,
-      })
-      .to(["#LeftHand", "#RightHand"], {
-        x: (i) => (i === 0 ? "-100%" : "100%"),
-        opacity: 1,
-        duration: 1,
-        ease: "power2.inOut",
-      });
+    let trigger;
+    let loadTimeout;
+    let ctx;
+
+    const initScrollTrigger = () => {
+      ctx = gsap.context(() => {
+        trigger = gsap.timeline({
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start:
+              window.innerWidth <= 768 ? "top+=200 center" : "center center",
+            end: "bottom bottom",
+            markers: true,
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        trigger
+          .fromTo(
+            ["#LeftHand", "#RightHand"],
+            {
+              x: (i) => (i === 0 ? "-100%" : "100%"),
+              opacity: 1,
+            },
+            {
+              x: "0%",
+              opacity: 1,
+              duration: 1,
+              ease: "power2.inOut",
+            }
+          )
+          .to(["#LeftHand", "#RightHand"], {
+            x: "0%",
+            opacity: 1,
+            duration: 1,
+          })
+          .to(["#LeftHand", "#RightHand"], {
+            x: (i) => (i === 0 ? "-100%" : "100%"),
+            opacity: 1,
+            duration: 1,
+            ease: "power2.inOut",
+          });
+      }, footerRef);
+    };
+
+    // Set fallback timeout
+    loadTimeout = setTimeout(initScrollTrigger, 1000);
+
+    // Run after images load (with background)
+    imagesLoaded(footerRef.current, { background: true }, initScrollTrigger);
+
+    return () => {
+      clearTimeout(loadTimeout); // Kill timeout first
+      trigger?.scrollTrigger?.kill(); // Kill ScrollTrigger safely
+      ctx?.revert(); // Revert GSAP context
+    };
   });
 
   //     Footer Hand Animation   ----------------
@@ -106,7 +127,9 @@ const Footer = () => {
     >
       <div className="w-full flex items-center pl-30">
         <div className="w-full py-5">
-          <h2 className="text-white text-5xl font-semibold footer_animation_text">Let's</h2>
+          <h2 className="text-white text-5xl font-semibold footer_animation_text">
+            Let's
+          </h2>
         </div>
       </div>
       <div className="w-full">
@@ -182,9 +205,13 @@ const Footer = () => {
         className="absolute top-8 -left-15 w-6 h-6 pointer-events-none z-50 cursor-pointer"
       >
         <div className="relative w-32 h-28">
-          <img className="absolute inset-1 z-10" src="/dev/images/circle_star.svg" alt="" />
-          
-          <div className="relative text-center z-20 flex items-center justify-center w-[50%] h-full text-white font-bold p-18 leading-3.5" >
+          <img
+            className="absolute inset-1 z-10"
+            src="/dev/images/circle_star.svg"
+            alt=""
+          />
+
+          <div className="relative text-center z-20 flex items-center justify-center w-[50%] h-full text-white font-bold p-18 leading-3.5">
             CONNECT NOW
           </div>
         </div>
