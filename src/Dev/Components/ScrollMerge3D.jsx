@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, Suspense, useState, useLayoutEffect } from "react";
+import React, { useRef, Suspense, useState, useLayoutEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { PerformanceMonitor } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
@@ -11,6 +11,7 @@ import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Galaxy } from "./GalaxyBackground";
 import imagesLoaded from "imagesloaded";
+import { RGBELoader } from 'three-stdlib';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,6 +97,14 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
     }
   }, [progress, leftModelRef, rightModelRef]);
 
+
+   const blackTexture = useMemo(() => {
+    const data = new Uint8Array([0, 0, 0, 255]); // RGBA (black)
+    const texture = new THREE.DataTexture(data, 1, 1, THREE.RGBAFormat);
+    texture.needsUpdate = true;
+    return texture;
+  }, []);
+
   return (
     <>
       <PerspectiveCamera
@@ -106,7 +115,7 @@ const Scene = ({ progress, leftModelRef, rightModelRef }) => {
         makeDefault
         position={[0, 0, 10]}
       />
-      <Environment preset="city" />
+      <Environment  map={blackTexture} background  />
 
       <EffectComposer>
         <Bloom
