@@ -7,31 +7,29 @@ const Header = lazy(() => import('./navbar/Header'));
 const Footer = lazy(() => import('./Footer'));
 
 export default function SplashWrapper({ children }) {
-  const [isReady, setIsReady] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const pathname = usePathname();
 
-  // When Suspense has loaded everything, we trigger ready
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('load', () => {
-        // Wait a tiny bit after load to ensure final paints (optional)
-        requestAnimationFrame(() => {
-          setIsReady(true);
-        });
-      });
-    }
+    // Wait for client hydration
+    const handleHydrate = () => {
+      setIsHydrated(true);
+    };
+
+    // Next.js hydration happens almost immediately on mount
+    requestAnimationFrame(handleHydrate);
   }, []);
 
   return (
     <>
-      {!isReady && (
+      {!isHydrated && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white">
           <LoadingScreen />
         </div>
       )}
 
-      {isReady && (
-        <Suspense fallback={null}>
+      {isHydrated && (
+        <Suspense fallback={<LoadingScreen />}>
           <Header />
           {children}
           <Footer key={pathname} />
