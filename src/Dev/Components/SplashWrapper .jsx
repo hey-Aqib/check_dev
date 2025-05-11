@@ -7,28 +7,52 @@ const Header = lazy(() => import('./navbar/Header'));
 const Footer = lazy(() => import('./Footer'));
 
 export default function SplashWrapper({ children }) {
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    // Wait for client hydration
-    const handleHydrate = () => {
-      setIsHydrated(true);
+    let minDelayFinished = false;
+    let siteLoaded = false;
+
+    const checkReady = () => {
+      if (minDelayFinished && siteLoaded) {
+        setIsReady(true);
+      }
     };
 
-    // Next.js hydration happens almost immediately on mount
-    requestAnimationFrame(handleHydrate);
+    // Minimum delay of 2 seconds
+    const delayTimer = setTimeout(() => {
+      minDelayFinished = true;
+      checkReady();
+    }, 2000);
+
+    // Wait for window to fully load
+    const onLoad = () => {
+      siteLoaded = true;
+      checkReady();
+    };
+
+    if (document.readyState === 'complete') {
+      onLoad(); // in case load already happened
+    } else {
+      window.addEventListener('load', onLoad);
+    }
+
+    return () => {
+      clearTimeout(delayTimer);
+      window.removeEventListener('load', onLoad);
+    };
   }, []);
 
   return (
     <>
-      {!isHydrated && (
+      {!isReady && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white">
           <LoadingScreen />
         </div>
       )}
 
-      {isHydrated && (
+      {isReady && (
         <Suspense fallback={<LoadingScreen />}>
           <Header />
           {children}
