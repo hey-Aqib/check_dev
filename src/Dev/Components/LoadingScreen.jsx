@@ -58,7 +58,7 @@ export default function LoadingScreen() {
 
       <div
         ref={logoRef}
-        className="relative text-center m-auto w-[50%] h-50 overflow-hidden"
+        className="relative text-center m-auto w-[50%] 2xl:w-[30%] h-50 overflow-hidden"
         style={{ clipPath: "inset(0 100% 0 0)" }}
       >
         <Image

@@ -1,7 +1,7 @@
 "use client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, {  useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useState } from "react";
 
 const buttons = [
@@ -28,13 +28,11 @@ const buttons = [
   },
   {
     label: "Clouds Platforms",
-    images: [
-    ],
+    images: [],
   },
   {
     label: "AI & Machine Learning",
-    images: [
-    ],
+    images: [],
   },
 ];
 
@@ -42,15 +40,17 @@ function FancyButton({ text, isSelected, onClick, disabled }) {
   return (
     <div
       onClick={disabled ? null : onClick}
-      className={`relative mt-[3%] inline-block mx-[1%] group cursor-pointer ${disabled ? 'cursor-not-allowed' : ''}`}
+      className={`relative mt-[3%] inline-block mx-[1%] group cursor-pointer ${
+        disabled ? "cursor-not-allowed" : ""
+      }`}
     >
       <div className="">
         <button
           className={`relative z-20 text-white px-8 py-4 uppercase tracking-wider rounded-md  text-sm overflow-hidden cursor-pointer 
-            ${isSelected ? 'bg-blue-600' : ''}
-            ${disabled ? 'bg-gray-400 cursor-not-allowed' : ''}
+            ${isSelected ? "bg-blue-600" : ""}
+            ${disabled ? "bg-gray-400 cursor-not-allowed" : ""}
           `}
-          disabled={disabled} 
+          disabled={disabled}
         >
           <span className="relative z-20">{text}</span>
           {!isSelected && (
@@ -61,62 +61,77 @@ function FancyButton({ text, isSelected, onClick, disabled }) {
         <img
           src="/dev/images/left top.svg"
           alt=""
-          className={`absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 z-20 transition-transform duration-300 ${disabled ? '' : 'group-hover:translate-x-1 group-hover:translate-y-1'}`}
+          className={`absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 z-20 transition-transform duration-300 ${
+            disabled
+              ? ""
+              : "group-hover:translate-x-1 group-hover:translate-y-1"
+          }`}
         />
         <img
           src="/dev/images/right top.svg"
           alt=""
-          className={`absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 z-20 transition-transform duration-300 ${disabled ? '' : 'group-hover:-translate-x-1 group-hover:translate-y-1'}`}
+          className={`absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 z-20 transition-transform duration-300 ${
+            disabled
+              ? ""
+              : "group-hover:-translate-x-1 group-hover:translate-y-1"
+          }`}
         />
         <img
           src="/dev/images/left bottom.svg"
           alt=""
-          className={`absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 z-20 transition-transform duration-300 ${disabled ? '' : 'group-hover:translate-x-1 group-hover:-translate-y-1'}`}
+          className={`absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 z-20 transition-transform duration-300 ${
+            disabled
+              ? ""
+              : "group-hover:translate-x-1 group-hover:-translate-y-1"
+          }`}
         />
         <img
           src="/dev/images/right bottom.svg"
           alt=""
-          className={`absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3 z-20 transition-transform duration-300 ${disabled ? '' : 'group-hover:-translate-x-1 group-hover:-translate-y-1'}`}
+          className={`absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3 z-20 transition-transform duration-300 ${
+            disabled
+              ? ""
+              : "group-hover:-translate-x-1 group-hover:-translate-y-1"
+          }`}
         />
       </div>
     </div>
   );
 }
 
-
 const Section7 = () => {
   const [selected, setSelected] = useState(0);
   const disabledButtons = [2, 3];
 
   gsap.registerPlugin(ScrollTrigger);
-  
-    useLayoutEffect(() => {
-      requestAnimationFrame(() => {
-        const elements = gsap.utils.toArray(".text-animation");
-  
-        elements.forEach((el) => {
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              scrollTrigger: {
-                trigger: el,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        });
+
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".text-animation");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
       });
-  
-      // Clean up scroll triggers when component unmounts
-      return () => {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
-    }, []);
+    });
+
+    // Clean up scroll triggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   return (
     <div className="relative w-full h-auto bg-black text-white p-10">
@@ -125,23 +140,22 @@ const Section7 = () => {
           Technologies We Use
         </h1>
         <p className="w-[92%] max-sm:text-center max-sm:mx-0 max-sm:w-[100%] max-sm:text-sm 2xl:w-[50%] px-2 mx-10 text-xl mt-5 text-animation">
-          CBS integrates a mix of technologies to deliver top-tier
-          solutions for our clients. Our technology toolkit features
+          CBS integrates a mix of technologies to deliver top-tier solutions for
+          our clients. Our technology toolkit features
         </p>
       </div>
       <div className="text-animation">
         <div className="mt-10 text-center">
           <div className="flex flex-wrap justify-evenly gap-4">
-          {buttons.map((btn, i) => (
-    
-      <FancyButton
-        key={i}
-        text={btn.label}
-        isSelected={selected === i}
-        onClick={() => setSelected(i)}
-        disabled={disabledButtons.includes(i)} 
-      />
-  ))}
+            {buttons.map((btn, i) => (
+              <FancyButton
+                key={i}
+                text={btn.label}
+                isSelected={selected === i}
+                onClick={() => setSelected(i)}
+                disabled={disabledButtons.includes(i)}
+              />
+            ))}
           </div>
 
           <div className="mt-10 px-4">

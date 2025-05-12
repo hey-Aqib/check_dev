@@ -105,7 +105,7 @@ const Section2 = () => {
   return (
     <section
       ref={wrapperRef}
-      className="z-12 relative max-sm:pb-[60%] md:h-screen 2xl:h-screen/2 top-0 bg-black"
+      className="z-12 relative max-sm:pb-[60%] md:h-screen 2xl:top-50 2xl:h-[90vh] top-0 bg-black"
     >
       <div
         ref={topRef}

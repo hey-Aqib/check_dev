@@ -107,7 +107,7 @@ const Section3 = () => {
 
   return (
     <div ref={sectionRef} className="bg-black text-white">
-      <div className="p-[10%] pt-0 text-6xl w-[20%] fade-in">
+      <div className="relative z-100 p-[10%] pt-0 text-6xl w-[20%] fade-in">
         <h1>Our Services</h1>
       </div>
       <div className="p-[7%] pt-0 pe-0 max-sm:p-5 flex flex-col gap-5 justify-center items-center">

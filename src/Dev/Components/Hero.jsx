@@ -36,7 +36,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative w-full bg-black max-sm:h-[80vh] max-sm:pt-10 md:pt-10 max-sm:pb-[50%]">
+    <div className="relative w-full bg-black max-sm:h-[80vh] 2xl:pt-20 max-sm:pt-10 md:pt-10 max-sm:pb-[50%]">
       {/* 
       <div className="fixed inset-0 z-15">
         <Canvas

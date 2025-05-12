@@ -72,7 +72,7 @@ const Section8 = () => {
 
             <div className="relative w-full h-full  gap-18 text-white grid grid-cols-[1fr_1fr_1fr]">
               <div className="relative ab-content-wrapper text-center">
-                <div className="absolute max-sm:top-24 top-110 flex flex-col items-center">
+                <div className="absolute max-sm:top-24 2xl:top-140 top-110 flex flex-col items-center">
                   <img
                     src="/dev/images/small_pin.svg"
                     alt="Ai Service"
@@ -104,7 +104,7 @@ const Section8 = () => {
               </div>
 
               <div className="relative ab-content-wrapper text-center max-w-sm  h-full">
-                <div className="absolute max-sm:top-24 top-110 max-sm:-left-20 flex flex-col items-center">
+                <div className="absolute max-sm:top-24 2xl:top-140 top-110 max-sm:-left-20 flex flex-col items-center">
                   <img
                     src="/dev/images/small_pin.svg"
                     alt="Ai Service"

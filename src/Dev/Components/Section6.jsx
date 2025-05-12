@@ -10,41 +10,42 @@ const Section6 = () => {
   const [isPaused, setIsPaused] = useState(false);
 
   gsap.registerPlugin(ScrollTrigger);
-  
-    useLayoutEffect(() => {
-      requestAnimationFrame(() => {
-        const elements = gsap.utils.toArray(".fade-in-section6");
-  
-        elements.forEach((el) => {
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              scrollTrigger: {
-                trigger: el,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        });
+
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      const elements = gsap.utils.toArray(".fade-in-section6");
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
       });
-  
-      // Clean up scroll triggers when component unmounts
-      return () => {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
-    }, []);
+    });
+
+    // Clean up scroll triggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   const slides = [
     {
       id: 1,
       title: "Track Your Business’ Market Value",
       details: `Understanding your business’s market value is crucial for strategic planning and long-term success. Our services enable you to track and analyze key indicators that reflect your market position, helping you stay ahead of industry trends and competitors.`,
-      image: "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Track-Your-Business-Market-Value-400x235-1.webp",
+      image:
+        "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Track-Your-Business-Market-Value-400x235-1.webp",
       button_text: "LEARN MORE",
       button_text_2: "",
     },
@@ -52,7 +53,8 @@ const Section6 = () => {
       id: 2,
       title: "Monitor Site Performance",
       details: `Your website’s performance reflects your brand’s digital strength. We monitor load times, engagement, and technical issues in real time. Continuous optimization ensures a seamless experience and higher conversions.`,
-      image: "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Monitor-Site-Performance-400x235-1.webp",
+      image:
+        "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Monitor-Site-Performance-400x235-1.webp",
       button_text: "LEARN MORE",
       button_text_2: "",
     },
@@ -60,7 +62,8 @@ const Section6 = () => {
       id: 3,
       title: "Optimize Visibility",
       details: `Visibility is key to attracting and retaining customers. Our strategies elevate your online presence, ensuring your brand is easily found. From SEO to content enhancement, we boost your visibility and drive more traffic.`,
-      image: "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Optimize-Visibility-400x235-1.webp",
+      image:
+        "https://corecentrixbusinesssolutions.com/wp-content/uploads/2024/09/Optimize-Visibility-400x235-1.webp",
       button_text: "LEARN MORE",
       button_text_2: "",
     },
@@ -68,27 +71,26 @@ const Section6 = () => {
 
   useLayoutEffect(() => {
     if (isPaused || !slideRefs.current[currentSlide]) return;
-  
+
     slideRefs.current.forEach((el) => {
       if (el) {
         gsap.set(el, { opacity: 0, x: "100%" });
       }
     });
-  
+
     gsap.to(slideRefs.current[currentSlide], {
       opacity: 1,
       x: "0%",
       duration: 0.8,
       ease: "power2.out",
     });
-  
+
     const timer = setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3300);
-  
+
     return () => clearTimeout(timer);
   }, [currentSlide, isPaused]);
-  
 
   const handleNextClick = () => {
     setCurrentSlide((prev) => {
@@ -96,22 +98,20 @@ const Section6 = () => {
       return next;
     });
   };
-  
+
   const handlePrevClick = () => {
     setCurrentSlide((prev) => {
       const next = (prev - 1 + slides.length) % slides.length;
       return next;
     });
   };
-  
 
   return (
-    <div className="text-white w-full min-h-[600px] h-auto max-sm:h-[115vh] md:h-[130vh] max-sm:pb-10 overflow-hidden bg-black">
-      <div
-        className="relative w-full h-full z-20"
-      >
+    <div className="text-white w-full min-h-[600px] h-auto max-sm:h-[115vh] md:h-[130vh] 2xl:h-[80vh] max-sm:pb-10 overflow-hidden bg-black">
+      <div className="relative w-full h-full z-20">
         <h1 className="text-center p-8 max-sm:p-0 pb-0 mt-16 text-4xl max-sm:text-4xl md:text-6xl 2xl:text-7xl font-bold fade-in-section6">
-        Your Business Statistics Turn Your <br />Decisions to Profit
+          Your Business Statistics Turn Your <br />
+          Decisions to Profit
         </h1>
 
         {slides.map((slide, index) => (
@@ -123,10 +123,8 @@ const Section6 = () => {
                 ? "opacity-100 pointer-events-auto z-30"
                 : "opacity-0 pointer-events-none z-20"
             }`}
-            
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-            
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
             <div className="grid grid-cols-[1.5fr_1fr] max-sm:flex max-sm:flex-col  max-sm:justify-center max-sm:items-center max-sm:text-center w-[90%] mt-10 gap-10 max-sm:mt-0 max-sm:gap-0">
               <div className="w-[100%] text-3xl sm:text-2xl md:text-4xl ">
@@ -168,31 +166,42 @@ const Section6 = () => {
                 </div>
               </div>
               <div>
-                <img src={slide.image}
-                style={{
-                  clipPath: "polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)",
-                }} alt="" className="w-[80%] max-sm:m-auto max-sm:mb-0 mt-[5%] border-25 border-[#1b1b1b]" />
+                <img
+                  src={slide.image}
+                  style={{
+                    clipPath:
+                      "polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)",
+                  }}
+                  alt=""
+                  className="w-[80%] max-sm:m-auto max-sm:mb-0 mt-[5%] border-25 border-[#1b1b1b]"
+                />
               </div>
             </div>
           </div>
         ))}
-      
-      <div className="absolute bottom-25 flex gap-3 left-20 z-30 max-sm:bottom-6">
-      <button
-        className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer"
-        onClick={handleNextClick}
-      >
-        <img src="/dev/images/left_arrow.svg" alt="" className="w-10 relative z-20" />
-      </button>
-      <button
-        className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer" 
-        onClick={handlePrevClick}
-      >
-        
-        <img src="/dev/images/right_arrow.svg" alt="" className="w-10 relative z-20" />
-      </button>
-      </div>
-      
+
+        <div className="absolute bottom-25  flex gap-3 left-20 z-30 max-sm:bottom-6">
+          <button
+            className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer"
+            onClick={handleNextClick}
+          >
+            <img
+              src="/dev/images/left_arrow.svg"
+              alt=""
+              className="w-10 relative z-20"
+            />
+          </button>
+          <button
+            className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer"
+            onClick={handlePrevClick}
+          >
+            <img
+              src="/dev/images/right_arrow.svg"
+              alt=""
+              className="w-10 relative z-20"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

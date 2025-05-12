@@ -93,7 +93,7 @@ const Section9 = () => {
   };
 
   return (
-    <div className="text-white relative w-full min-h-[600px] h-auto max-sm:h-[150vh] md:h-[120vh] overflow-hidden bg-black">
+    <div className="text-white relative w-full min-h-[600px] h-auto max-sm:h-[150vh] md:h-[120vh] 2xl:h-[100vh] overflow-hidden bg-black">
       <div className="w-full max-sm:h-10 h-16 bg-gradient-to-b  from-black to-transparent z-20 absolute top-0 left-0" />
       <img
         src="/dev/images/border_line.svg"
@@ -133,26 +133,28 @@ const Section9 = () => {
               ref={(el) => (slideRefs.current[currentSlide] = el)}
               className="text_animation_section9"
             />
-            <button
-              className="absolute left-[45%] max-sm:left-[54%] 2xl:bottom-50  md:left-[48%] bottom-10 max-sm:bottom-30 md:bottom-22 p-2 text-base max-sm:text-lg scale-125 max-sm:scale-130 font-bold text-white bg-opacity-50 cursor-pointer z-20"
-              onClick={handlePrevClick}
-            >
-              <img
-                src="/dev/images/right_arrow.svg"
-                alt=""
-                className="w-10 relative z-20"
-              />
-            </button>
-            <button
-              className="absolute bottom-10 max-sm:bottom-30 md:bottom-22 2xl:bottom-50   left-[45%] max-sm:left-[35%] md:left-[42%] scale-125 max-sm:scale-130 p-2 text-base max-sm:text-lg font-bold text-white bg-opacity-50 cursor-pointer z-20"
-              onClick={handleNextClick}
-            >
-              <img
-                src="/dev/images/left_arrow.svg"
-                alt=""
-                className="w-10 relative"
-              />
-            </button>
+            <div className="absolute  bottom-45 left-[50%]  flex gap-3 align-center justify-center z-30 max-sm:bottom-6">
+              <button
+                className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer"
+                onClick={handleNextClick}
+              >
+                <img
+                  src="/dev/images/left_arrow.svg"
+                  alt=""
+                  className="w-10 relative z-20"
+                />
+              </button>
+              <button
+                className="p-2 text-base sm:text-lg scale-125 sm:scale-150 font-bold text-white bg-opacity-50 cursor-pointer"
+                onClick={handlePrevClick}
+              >
+                <img
+                  src="/dev/images/right_arrow.svg"
+                  alt=""
+                  className="w-10 relative z-20"
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
