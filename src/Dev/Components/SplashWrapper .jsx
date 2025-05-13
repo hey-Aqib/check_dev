@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import LoadingScreen from './LoadingScreen';
 
+
 import dynamic from 'next/dynamic';
 
 const DynamicHeader = dynamic(() => import('./navbar/Header'));
