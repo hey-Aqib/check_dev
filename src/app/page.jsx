@@ -12,13 +12,9 @@ import Section10 from "@/Dev/Components/Section10";
 import Section11 from "@/Dev/Components/Section11";
 import Section12 from "@/Dev/Components/Section12";
 
-export default async function Home() {
+export default function Home() {
 
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 6000);
-  })
+  
   
   return (
     <>
