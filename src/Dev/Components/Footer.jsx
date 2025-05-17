@@ -58,9 +58,10 @@ const Footer = () => {
     const footertl = gsap.timeline({
       scrollTrigger: {
         trigger: footerRef.current,
-        start: "top bottom", // ✅ Start when footer just enters
+        start: "center bottom", // ✅ Start when footer just enters
         end: "center bottom",
         scrub: false,
+        markers: true,
         toggleActions: "play none none reverse",
       },
     });
